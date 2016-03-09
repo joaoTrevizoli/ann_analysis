@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import csv
 
 __author__ = 'joao'
 
@@ -27,28 +28,76 @@ class GetFolders(object):
         else:
             raise CityNotFoundException('City not found')
 
-    def meteorologic_seasen_paths(self):
-        city_season_path = [''.join([self.city_data_path, self.city_name, '_', season])
+    def meteorologic_season_paths(self):
+        city_season_path = [(season, ''.join([self.city_data_path, self.city_name, '_', season]))
                             for season in self.__seasons]
         paths = []
         for city_season in city_season_path:
-            for dirpath, _, fnames in os.walk(city_season, topdown=True):
+            for dirpath, _, fnames in os.walk(city_season[1], topdown=True):
                 if dirpath.endswith(('3', '4', '5', '6', '7')):
-                    paths.append(dirpath)
+                    paths.append((city_season[0], int(dirpath[-1]), dirpath))
         return sorted(paths)
 
     def percentage_paths(self, tipo):
         if tipo == 'previsao':
             file_name = '/porcentagem_estimativa.csv'
         elif tipo == 'estimativa':
-            file_name = 'pocentagem_previsao.csv'
+            file_name = '/pocentagem_previsao.csv'
         else:
             raise ReportTypeErrorException('please write previsao or estimativa as argument')
 
-        percentage_files = [''.join([f, file_name]) for f in self.meteorologic_seasen_paths()]
-        percentage_files = [f for f in percentage_files if os.path.exists(f)]
+        percentage_files = ((f[0], f[1], ''.join([f[2], file_name])) for f in self.meteorologic_season_paths())
+        percentage_files = [[f[0], f[1], f[2]] for f in percentage_files if os.path.exists(f[2])]
         return percentage_files
+
+    def chisquare_paths(self, tipo):
+        if tipo == 'previsao':
+            file_name = '/chiquadrado_estimativa.txt'
+        elif tipo == 'estimativa':
+            file_name = '/chiquadrado_pocentagem_previsao.txt'
+        else:
+            raise ReportTypeErrorException('please write previsao or estimativa as argument')
+
+        percentage_files = ((f[0], f[1], ''.join([f[2], file_name])) for f in self.meteorologic_season_paths())
+        percentage_files = [[f[0], f[1], f[2]] for f in percentage_files if os.path.exists(f[2])]
+        return percentage_files
+
+
+class OpenResultFiles(GetFolders):
+    def get_percentage_values(self, tipo):
+        percentage_data = []
+        for f_path in self.percentage_paths(tipo):
+            with open(f_path[2], 'r') as f:
+                read_csv = csv.reader(f, delimiter=',')
+                csv_data = [i for i in read_csv]
+            d = f_path[0:2]
+            d.append(float(csv_data[2][1]))
+            percentage_data.append(d)
+        return percentage_data
+
+    def get_chisquare_values(self, tipo):
+        percentage_data = []
+        for f_path in self.chisquare_paths(tipo):
+            with open(f_path[2], 'r') as f:
+                read_csv = csv.reader(f, delimiter=',')
+                csv_data = [i for i in read_csv]
+            d = f_path[0:2]
+            chisq = float(csv_data[1][0])
+            p_val = float(csv_data[1][1])
+            d.extend([chisq, p_val])
+            if chisq > p_val:
+                d.append(1)
+            else:
+                d.append(0)
+            percentage_data.append(d)
+        return percentage_data
+
+
 
 if __name__ == '__main__':
     data = GetFolders('jaboticabal')
-    print data.percentage_paths('previsao')
+    # for i in data.chisquare_paths("previsao"):
+    #     print i
+    teste = OpenResultFiles('jaboticabal')
+    # print teste.get_percentage_values('previsao')
+    print teste.get_chisquare_values('previsao')
