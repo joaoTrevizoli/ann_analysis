@@ -1,0 +1,2 @@
+cidade, estacao, dias_acumulados, periodos_entrada, steps, topologia, numero_de_epocas, momento, lr, validacao
+campo_mourao, summer, 6, 3, 1, [50, 1], 350, 0.9, 1e-07, 35

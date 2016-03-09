@@ -1,0 +1,2 @@
+cidade, estacao, dias_acumulados, periodos_entrada, steps, topologia, numero_de_epocas, momento, lr, validacao
+piracicaba, spring, 7, 4, 1, [50, 1], 250, 0.9, 1e-05, 45

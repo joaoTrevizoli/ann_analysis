@@ -1,0 +1,2 @@
+chisq, p-value 
+nan, nan

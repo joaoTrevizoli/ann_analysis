@@ -1,0 +1,2 @@
+cidade, estacao, dias_acumulados, periodos_entrada, steps, topologia, numero_de_epocas, momento, lr, validacao
+campo_mourao, spring, 3, 4, 1, [50, 1], 550, 0.9, 1e-07, 40

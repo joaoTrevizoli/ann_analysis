@@ -1,0 +1,2 @@
+cidade, estacao, dias_acumulados, periodos_entrada, steps, topologia, numero_de_epocas, momento, lr, validacao
+rio_verde, winter, 6, 4, 1, [50, 1], 238, 0.9, 1e-07, 40

@@ -1,0 +1,2 @@
+cidade, estacao, dias_acumulados, periodos_entrada, steps, topologia, numero_de_epocas, momento, lr, validacao
+presidente_prudente, spring, 7, 4, 1, [50, 1], 480, 0.9, 1e-07, 45
