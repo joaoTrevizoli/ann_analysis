@@ -41,9 +41,9 @@ class GetFolders(object):
 
     def percentage_paths(self, tipo):
         if tipo == 'previsao':
-            file_name = '/porcentagem_estimativa.csv'
-        elif tipo == 'estimativa':
             file_name = '/porcentagem_previsao.csv'
+        elif tipo == 'estimativa':
+            file_name = '/porcentagem_estimativa.csv'
         else:
             raise ReportTypeErrorException('please write previsao or estimativa as argument')
 
@@ -53,9 +53,9 @@ class GetFolders(object):
 
     def chisquare_paths(self, tipo):
         if tipo == 'previsao':
-            file_name = '/chiquadrado_estimativa.txt'
-        elif tipo == 'estimativa':
             file_name = '/chiquadrado_previsao.txt'
+        elif tipo == 'estimativa':
+            file_name = '/chiquadrado_estimativa.txt'
         else:
             raise ReportTypeErrorException('please write previsao or estimativa as argument')
 
@@ -123,21 +123,28 @@ if __name__ == '__main__':
     teste = OpenResultFiles('jaboticabal')
     cities = sorted(os.listdir(teste.base_dir))
     for c in cities[1:]:
-        analysis = OpenResultFiles(c).tabulate('porcentagem', 'estimativa')
+        analysis = OpenResultFiles(c).tabulate('porcentagem', 'previsao')
         for k, v in analysis.items():
-            with open('teste.csv', 'wb') as csv_fil:
-                fieldnames = v.keys()
-                fieldnames.append('cidade')
+            with open('porcentagem_previsao.csv', 'a') as csv_fil:
+                fieldnames = ['estacao', 't', 'q', 'c', 's', 'st', 'city']
                 wrt = csv.DictWriter(csv_fil,
                                      fieldnames=fieldnames,
                                      dialect='excel')
-                wrt.writeheader()
-
+                matriz = []
                 for k2, v2 in v.items():
-                    print k2
-                    for j in v2:
-                        print {k2: j}
-                        wrt.writerow({k2: j})
+                    wrt.writerow({'estacao': k2,
+                                  't': v2[0],
+                                  'q': v2[1],
+                                  'c': v2[2],
+                                  's': v2[3],
+                                  'st': v2[4],
+                                 'city': k})
+                # for i, j, z, h in zip(v['spring'], v['summer'], v['autumn'], v['winter']):
+                #     wrt.writerow({'spring': i,
+                #                   'summer': j,
+                #                   'autumn': z,
+                #                   'winter': h,
+                #                   'city': k})
                 # wrt.writerows(v)
 
 
