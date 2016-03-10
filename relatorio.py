@@ -21,7 +21,8 @@ class GetFolders(object):
 
     def __init__(self, city):
         base_dir = os.path.abspath(os.path.dirname(__file__))
-        city_dir = ''.join([base_dir, '/data/', city, '/'])
+        self.base_dir = ''.join([base_dir, '/data/'])
+        city_dir = ''.join([self.base_dir, city, '/'])
         self.city_name = city
         if os.path.exists(city_dir):
             self.city_data_path = city_dir
@@ -54,7 +55,7 @@ class GetFolders(object):
         if tipo == 'previsao':
             file_name = '/chiquadrado_estimativa.txt'
         elif tipo == 'estimativa':
-            file_name = '/chiquadrado_pocentagem_previsao.txt'
+            file_name = '/chiquadrado_previsao.txt'
         else:
             raise ReportTypeErrorException('please write previsao or estimativa as argument')
 
@@ -103,11 +104,16 @@ class OpenResultFiles(GetFolders):
                     table[r[0]].append(r[2])
         elif analisis == 'quiquadrado':
             result = self.get_chisquare_values(tipo)
-
+            for r in result:
+                if not r[0] in table:
+                    table[r[0]] = [r[-1]]
+                else:
+                    table[r[0]].append(r[-1])
         else:
             raise ReportTypeErrorException('please write porcentagem or quiquadrado as argument')
 
-        return table
+        return {self.city_name: table}
+
 
 
 if __name__ == '__main__':
@@ -115,6 +121,26 @@ if __name__ == '__main__':
     # for i in data.chisquare_paths("previsao"):
     #     print i
     teste = OpenResultFiles('jaboticabal')
-    print teste.tabulate('porcentagem', 'estimativa')
+    cities = sorted(os.listdir(teste.base_dir))
+    for c in cities[1:]:
+        analysis = OpenResultFiles(c).tabulate('porcentagem', 'estimativa')
+        for k, v in analysis.items():
+            with open('teste.csv', 'wb') as csv_fil:
+                fieldnames = v.keys()
+                fieldnames.append('cidade')
+                wrt = csv.DictWriter(csv_fil,
+                                     fieldnames=fieldnames,
+                                     dialect='excel')
+                wrt.writeheader()
+
+                for k2, v2 in v.items():
+                    print k2
+                    for j in v2:
+                        print {k2: j}
+                        wrt.writerow({k2: j})
+                # wrt.writerows(v)
+
+
+
     # print teste.get_percentage_values('previsao')
     # print teste.get_chisquare_values('previsao')
