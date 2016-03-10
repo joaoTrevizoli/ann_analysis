@@ -42,7 +42,7 @@ class GetFolders(object):
         if tipo == 'previsao':
             file_name = '/porcentagem_estimativa.csv'
         elif tipo == 'estimativa':
-            file_name = '/pocentagem_previsao.csv'
+            file_name = '/porcentagem_previsao.csv'
         else:
             raise ReportTypeErrorException('please write previsao or estimativa as argument')
 
@@ -92,6 +92,22 @@ class OpenResultFiles(GetFolders):
             percentage_data.append(d)
         return percentage_data
 
+    def tabulate(self, analisis, tipo):
+        table = {}
+        if analisis == 'porcentagem':
+            result = self.get_percentage_values(tipo)
+            for r in result:
+                if not r[0] in table:
+                    table[r[0]] = [r[2]]
+                else:
+                    table[r[0]].append(r[2])
+        elif analisis == 'quiquadrado':
+            result = self.get_chisquare_values(tipo)
+
+        else:
+            raise ReportTypeErrorException('please write porcentagem or quiquadrado as argument')
+
+        return table
 
 
 if __name__ == '__main__':
@@ -99,5 +115,6 @@ if __name__ == '__main__':
     # for i in data.chisquare_paths("previsao"):
     #     print i
     teste = OpenResultFiles('jaboticabal')
+    print teste.tabulate('porcentagem', 'estimativa')
     # print teste.get_percentage_values('previsao')
-    print teste.get_chisquare_values('previsao')
+    # print teste.get_chisquare_values('previsao')
