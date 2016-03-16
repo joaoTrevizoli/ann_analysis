@@ -3,6 +3,7 @@
 
 import os
 import csv
+from math import isnan
 
 __author__ = 'joao'
 
@@ -83,10 +84,16 @@ class OpenResultFiles(GetFolders):
                 read_csv = csv.reader(f, delimiter=',')
                 csv_data = [i for i in read_csv]
             d = f_path[0:2]
-            chisq = float(csv_data[1][0])
-            p_val = float(csv_data[1][1])
+            try:
+                chisq = float(csv_data[1][0])
+                p_val = float(csv_data[1][1])
+            except:
+                chisq = 0
+                p_val = 1
             d.extend([chisq, p_val])
-            if chisq > p_val:
+            if isnan(chisq) or isnan(p_val):
+                d.append(0)
+            elif chisq > p_val:
                 d.append(1)
             else:
                 d.append(0)
@@ -123,9 +130,9 @@ if __name__ == '__main__':
     teste = OpenResultFiles('jaboticabal')
     cities = sorted(os.listdir(teste.base_dir))
     for c in cities[1:]:
-        analysis = OpenResultFiles(c).tabulate('porcentagem', 'previsao')
+        analysis = OpenResultFiles(c).tabulate('quiquadrado', 'estimativa')
         for k, v in analysis.items():
-            with open('porcentagem_previsao.csv', 'a') as csv_fil:
+            with open('quiquadrado_estimativa.csv', 'a') as csv_fil:
                 fieldnames = ['estacao', 't', 'q', 'c', 's', 'st', 'city']
                 wrt = csv.DictWriter(csv_fil,
                                      fieldnames=fieldnames,
