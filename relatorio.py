@@ -64,6 +64,12 @@ class GetFolders(object):
         percentage_files = [[f[0], f[1], f[2]] for f in percentage_files if os.path.exists(f[2])]
         return percentage_files
 
+    def mse_path(self):
+        mse_files = ((f[0], f[1], '{}/{}_{}_mse.txt'.format(f[2], self.city_name, f[0]))
+                     for f in self.meteorologic_season_paths())
+        mse_files = [[f[0], f[1], f[2]] for f in mse_files if os.path.exists(f[2])]
+        return mse_files
+
 
 class OpenResultFiles(GetFolders):
     def get_percentage_values(self, tipo):
@@ -100,6 +106,15 @@ class OpenResultFiles(GetFolders):
             percentage_data.append(d)
         return percentage_data
 
+    def get_mse_values(self):
+        mse_data = []
+        for f_path in self.mse_path():
+            with open(f_path[2], 'r') as f:
+                d = f_path[0:2]
+                d.append(float(f.readlines()[-1]))
+            mse_data.append(d)
+        return mse_data
+
     def tabulate(self, analisis, tipo):
         table = {}
         if analisis == 'porcentagem':
@@ -121,6 +136,15 @@ class OpenResultFiles(GetFolders):
 
         return {self.city_name: table}
 
+    def tabulate_mse(self):
+        table = {}
+        result = self.get_mse_values()
+        for r in result:
+                if not r[0] in table:
+                    table[r[0]] = [r[2]]
+                else:
+                    table[r[0]].append(r[2])
+        return {self.city_name: table}
 
 
 if __name__ == '__main__':
@@ -129,16 +153,35 @@ if __name__ == '__main__':
     #     print i
     teste = OpenResultFiles('jaboticabal')
     cities = sorted(os.listdir(teste.base_dir))
+    # for c in cities[1:]:
+    #     analysis = OpenResultFiles(c).tabulate('quiquadrado', 'estimativa')
+    #     for k, v in analysis.items():
+    #         with open('quiquadrado_estimativa.csv', 'a') as csv_fil:
+    #             fieldnames = ['estacao', 't', 'q', 'c', 's', 'st', 'city']
+    #             wrt = csv.DictWriter(csv_fil,
+    #                                  fieldnames=fieldnames,
+    #                                  dialect='excel')
+    #             matriz = []
+    #             for k2, v2 in v.items():
+    #                 wrt.writerow({'estacao': k2,
+    #                               't': v2[0],
+    #                               'q': v2[1],
+    #                               'c': v2[2],
+    #                               's': v2[3],
+    #                               'st': v2[4],
+    #                              'city': k})
+    print teste.tabulate_mse()
     for c in cities[1:]:
-        analysis = OpenResultFiles(c).tabulate('quiquadrado', 'estimativa')
+        analysis = OpenResultFiles(c).tabulate_mse()
         for k, v in analysis.items():
-            with open('quiquadrado_estimativa.csv', 'a') as csv_fil:
+            with open('mse.csv', 'a') as csv_fil:
                 fieldnames = ['estacao', 't', 'q', 'c', 's', 'st', 'city']
                 wrt = csv.DictWriter(csv_fil,
                                      fieldnames=fieldnames,
                                      dialect='excel')
                 matriz = []
                 for k2, v2 in v.items():
+                    print v2, k2, k
                     wrt.writerow({'estacao': k2,
                                   't': v2[0],
                                   'q': v2[1],
@@ -146,15 +189,3 @@ if __name__ == '__main__':
                                   's': v2[3],
                                   'st': v2[4],
                                  'city': k})
-                # for i, j, z, h in zip(v['spring'], v['summer'], v['autumn'], v['winter']):
-                #     wrt.writerow({'spring': i,
-                #                   'summer': j,
-                #                   'autumn': z,
-                #                   'winter': h,
-                #                   'city': k})
-                # wrt.writerows(v)
-
-
-
-    # print teste.get_percentage_values('previsao')
-    # print teste.get_chisquare_values('previsao')
