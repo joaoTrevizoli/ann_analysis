@@ -179,8 +179,91 @@ plt.show()
 
 altitude = np.array([11.7, 64.5, 286.3, 369.2, 435.5, 547, 605, 616.4, 737, 774.6])
 
-media = np.array([97.2222222222, 53.248138324,
-                  66.6666666667, 55, 58.5365853658,
-                  60.9756097561, 56.5853658536,
-                  59.4444444444, 59.0243902439,
-                  58.8888888889])
+media_primavera = np.array([97.2222222222, 53.248138324,
+                            66.6666666667, 55.000000000,
+                            58.5365853658, 60.9756097561,
+                            56.5853658536, 59.4444444444,
+                            59.0243902439, 58.8888888889])
+
+z_primavera = np.polyfit(altitude, media_primavera, 2)
+primavera_liner_reg = stats.linregress(altitude, media_primavera)
+p_primavera = np.poly1d(z_primavera)
+print pow(primavera_liner_reg.rvalue, 2), z_primavera
+
+
+media_verao = np.array([53.6585365854, 60.2380952381,
+                        85.5555555556, 65.5555555556,
+                        75.6097560976, 66.8292682927,
+                        73.6585365853, 75.6944444444,
+                        78.5365853658, 82.7777777778])
+
+z_verao = np.polyfit(altitude, media_verao, 2)
+verao_liner_reg = stats.linregress(altitude, media_verao)
+p_verao = np.poly1d(z_verao)
+print pow(verao_liner_reg.rvalue, 2), z_verao
+
+media_outono = np.array([65.0000000000, 61.4919354839,
+                          50.5555555556, 60.0000000000,
+                          54.6341463415, 60.0000000000,
+                          57.0731707317, 47.2222222222,
+                          49.756097561, 60.0000000000])
+
+z_outono = np.polyfit(altitude, media_outono, 2)
+verao_liner_reg = stats.linregress(altitude, media_outono)
+p_outono= np.poly1d(z_outono)
+print pow(verao_liner_reg.rvalue, 2), z_outono
+
+media_inverno = np.array([75.1219512195, 97.3978494624,
+                          85.0000000000, 66.1111111111,
+                          65.3658536585, 70.7317073171,
+                          78.5365853658, 80.6606606607,
+                          83.9024390244, 82.7777777778])
+
+z_inverno = np.polyfit(altitude, media_inverno, 2)
+verao_liner_reg = stats.linregress(altitude, media_inverno)
+p_inverno= np.poly1d(z_inverno)
+print pow(verao_liner_reg.rvalue, 2), z_inverno
+
+#suavizando curva do grafico no eixo x para todos os valores
+altitude_mar_smooth = np.linspace(altitude.min(), altitude.max(), 300)
+#fim
+
+plt.subplot(221)
+#suavisando no eixo y
+smooth_primavera = spline(altitude, p_primavera(altitude), altitude_mar_smooth)
+# fim
+plt.plot(altitude, media_primavera, 'ks', altitude_mar_smooth, smooth_primavera, 'r-', lw=1)
+plt.axis([0, 800, 45, 100])
+plt.setp(plt.gca(), yticks=(50, 75, 100), xticks=(0, 100, 200, 300, 400, 500, 600, 700, 800))
+plt.text(50, 90, 'Spring', fontsize=15)
+
+plt.subplot(222)
+#suavisando no eixo y
+smooth_verao = spline(altitude, p_verao(altitude), altitude_mar_smooth)
+# fim
+plt.plot(altitude, media_verao, 'ks', altitude_mar_smooth, smooth_verao, 'r-', lw=1)
+plt.axis([0, 800, 45, 100])
+plt.setp(plt.gca(), yticks=(50, 75, 100), xticks=(0, 100, 200, 300, 400, 500, 600, 700, 800))
+plt.text(50, 90, 'Summer', fontsize=15)
+
+plt.subplot(223)
+#suavisando no eixo y
+smooth_outono = spline(altitude, p_outono(altitude), altitude_mar_smooth)
+# fim
+plt.plot(altitude, media_outono, 'ks', altitude_mar_smooth, smooth_outono, 'r-', lw=1)
+plt.axis([0, 800, 45, 100])
+plt.setp(plt.gca(), yticks=(50, 75, 100), xticks=(0, 100, 200, 300, 400, 500, 600, 700, 800))
+plt.text(50, 90, 'Autumn', fontsize=15)
+
+plt.subplot(224)
+#suavisando no eixo y
+smooth_inverno = spline(altitude, p_inverno(altitude), altitude_mar_smooth)
+# fim
+plt.plot(altitude, media_inverno, 'ks', altitude_mar_smooth, smooth_inverno, 'r-', lw=1)
+plt.axis([0, 800, 45, 100])
+plt.setp(plt.gca(), yticks=(50, 75, 100), xticks=(0, 100, 200, 300, 400, 500, 600, 700, 800))
+plt.text(50, 90, 'Winter', fontsize=15)
+
+plt.show()
+
+# -------------------------------- Fim Mesoclimática ----------------------------------------------#
