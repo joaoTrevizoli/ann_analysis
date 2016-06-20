@@ -1,9 +1,14 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import requests
 from lxml import html
+import re
 
 campo_mourao = {'city': 'campo_mourao',
-                'url': 'http://www.bdclima.cnpm.embrapa.br/resultados/balanco.php?UF=&COD=46'}
-
+                'url': 'http://www.bdclima.cnpm.embrapa.br/resultados/balanco.php?UF=&COD=159'}
+jaguaruana = {'city': 'jaguaruana',
+              'url': 'http://www.bdclima.cnpm.embrapa.br/resultados/balanco.php?UF=&COD=46'}
 
 class GetData(object):
     def __init__(self, url):
@@ -45,7 +50,14 @@ class GetData(object):
         self.__data['ret'] = data_matrix[5]
         self.__data['def'] = data_matrix[6]
         self.__data['exc'] = data_matrix[7]
+        for key, val in self.__data.items():
+            val = map(lambda x: x.strip(), val)
+            if re.match(r'\d', val[0]):
+                val = map(lambda x: float(x.replace(',', '.')), val)
+            self.__data[key] = val
 
-if __name__ == '__main__':
-    teste = GetData(campo_mourao['url'])
-    print teste.data
+campo_mourao_crawler = GetData(campo_mourao['url'])
+campo_mourao.update(campo_mourao_crawler.data)
+jaguaruana_crawler = GetData(jaguaruana['url'])
+jaguaruana.update(jaguaruana_crawler.data)
+
