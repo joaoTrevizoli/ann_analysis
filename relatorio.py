@@ -70,6 +70,12 @@ class GetFolders(object):
         mse_files = [[f[0], f[1], f[2]] for f in mse_files if os.path.exists(f[2])]
         return mse_files
 
+    def parameter_path(self):
+        parameter_files = ((f[0], f[1], '{}/parametros.txt'.format(f[2]))
+                     for f in self.meteorologic_season_paths())
+        parameter_files = [[f[0], f[1], f[2]] for f in parameter_files if os.path.exists(f[2])]
+        return parameter_files
+
 
 class OpenResultFiles(GetFolders):
     def get_percentage_values(self, tipo):
@@ -115,6 +121,18 @@ class OpenResultFiles(GetFolders):
             mse_data.append(d)
         return mse_data
 
+    def get_parameter_values(self):
+        parameter_data = []
+        for f_path in self.parameter_path():
+            with open(f_path[2], 'r') as f:
+                d = f_path[0:2]
+                data_str = f.readlines()[-1]
+                data_str = data_str.replace(']', '').replace('[', '')
+                data_parsed = map(lambda x: float(x), data_str.split(', ')[4:9])
+                d.extend(data_parsed)
+            parameter_data.append(d)
+        return parameter_data
+
     def tabulate(self, analisis, tipo):
         table = {}
         if analisis == 'porcentagem':
@@ -140,12 +158,22 @@ class OpenResultFiles(GetFolders):
         table = {}
         result = self.get_mse_values()
         for r in result:
-                if not r[0] in table:
-                    table[r[0]] = [r[2]]
-                else:
-                    table[r[0]].append(r[2])
+            print r
+            if not r[0] in table:
+                table[r[0]] = [r[2]]
+            else:
+                table[r[0]].append(r[2])
         return {self.city_name: table}
 
+    def tabulate_parameters(self):
+        table = {}
+        result = self.get_parameter_values()
+        for r in result:
+            if not r[0] in table:
+                table[r[0]] = [r[1:]]
+            else:
+                table[r[0]].append(r[1:])
+        return {self.city_name: table}
 
 if __name__ == '__main__':
     data = GetFolders('jaboticabal')
@@ -170,22 +198,32 @@ if __name__ == '__main__':
     #                               's': v2[3],
     #                               'st': v2[4],
     #                              'city': k})
-    print teste.tabulate_mse()
+
     for c in cities[1:]:
-        analysis = OpenResultFiles(c).tabulate_mse()
-        for k, v in analysis.items():
-            with open('mse.csv', 'a') as csv_fil:
-                fieldnames = ['estacao', 't', 'q', 'c', 's', 'st', 'city']
-                wrt = csv.DictWriter(csv_fil,
-                                     fieldnames=fieldnames,
-                                     dialect='excel')
-                matriz = []
+        res = OpenResultFiles(c).tabulate_parameters()
+        with open('parametros.csv', 'a') as csv_f:
+            wrt = csv.writer(csv_f)
+            for k, v in res.items():
                 for k2, v2 in v.items():
-                    print v2, k2, k
-                    wrt.writerow({'estacao': k2,
-                                  't': v2[0],
-                                  'q': v2[1],
-                                  'c': v2[2],
-                                  's': v2[3],
-                                  'st': v2[4],
-                                 'city': k})
+                    line = [i for sub in v2 for i in sub]
+                    line.insert(0, k)
+                    line.insert(1, k2)
+                    wrt.writerow(line)
+    # for c in cities[1:]:
+    #     analysis = OpenResultFiles(c).tabulate_mse()
+    #     for k, v in analysis.items():
+    #         with open('mse.csv', 'a') as csv_fil:
+    #             fieldnames = ['estacao', 't', 'q', 'c', 's', 'st', 'city']
+    #             wrt = csv.DictWriter(csv_fil,
+    #                                  fieldnames=fieldnames,
+    #                                  dialect='excel')
+    #             matriz = []
+    #             for k2, v2 in v.items():
+    #                 print v2, k2, k
+    #                 wrt.writerow({'estacao': k2,
+    #                               't': v2[0],
+    #                               'q': v2[1],
+    #                               'c': v2[2],
+    #                               's': v2[3],
+    #                               'st': v2[4],
+    #                              'city': k})

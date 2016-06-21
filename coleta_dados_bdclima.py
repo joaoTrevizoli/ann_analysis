@@ -4,6 +4,7 @@
 import requests
 from lxml import html
 import re
+import numpy as np
 
 campo_mourao = {'city': 'campo_mourao',
                 'url': 'http://www.bdclima.cnpm.embrapa.br/resultados/balanco.php?UF=&COD=159'}
@@ -53,7 +54,7 @@ class GetData(object):
         for key, val in self.__data.items():
             val = map(lambda x: x.strip(), val)
             if re.match(r'\d', val[0]):
-                val = map(lambda x: float(x.replace(',', '.')), val)
+                val = np.array(map(lambda x: float(x.replace(',', '.')), val))
             self.__data[key] = val
 
 campo_mourao_crawler = GetData(campo_mourao['url'])
