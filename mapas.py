@@ -6,6 +6,8 @@ import matplotlib.cm as cm
 
 import os
 
+# http://www.gadm.org/country Joao do futuro, lebrar desse site
+
 basepath = os.path.abspath(os.path.dirname(__file__))
 shapefile = ''.join([basepath, '/mapas/BRA_adm1'])
 
@@ -33,7 +35,8 @@ lons = np.array([-48.3257, -37.7815, -47.6476,
                  -35.7351, -51.393, -50.9197,
                  -47.9392])
 
-x,y = m(lons, lats)
+x, y = m(lons, lats)
+
 m.scatter(x, y, s=50, marker='o', c='red', cmap=cm.cool, alpha=0.7, zorder=100)
 
 m.ax.set_title('Weather Station Locations')
