@@ -8,15 +8,19 @@ from matplotlib import cm
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import matplotlib.patches as mpatches
 import matplotlib.lines as mlines
-from scipy import stats
+from scipy import stats, interpolate
 from scipy.interpolate import spline
 import matplotlib.pyplot as plt
 import numpy as np
 from coleta_dados_bdclima import campo_mourao, jaguaruana
 
-x_tk = ["3 days average", "4 days average", "5 days average", "6 days average", "7 days average"]
+from time import sleep
+
+x_tk = ["3d", "4d", "5d", "6d", "7d"]
 y = [1, 2, 3, 4]
 x = [1, 2, 3, 4, 5]
+x_n, y_n = np.mgrid[1:5:125j, 1:4:100j]
+x_prev, y_prev = np.meshgrid(x, y)
 
 # -------------------------------- Estimativa ---------------------------------------------------#
 y_tk = ["autumn", "spring", "summer", "winter"]
@@ -29,10 +33,11 @@ z = np.array([[86.2639777541, 91.7085907336, 92.6752320789,	95.3093500985, 97.60
 fig = plt.figure()
 ax = fig.gca(projection='3d')
 
-x_prev, y_prev = np.meshgrid(x, y)
+tck = interpolate.bisplrep(x_prev, y_prev, z, s=0)
+z_new = interpolate.bisplev(x_n[:,0], y_n[0,:], tck)
 
 
-surf = ax.plot_surface(x_prev, y_prev, z, rstride=1, cstride=1, cmap=cm.coolwarm,
+surf = ax.plot_surface(x_n, y_n, z_new, rstride=1, cstride=1, cmap=cm.coolwarm,
                        linewidth=0, antialiased=True)
 ax.set_zlim3d(50, 100)
 ax.set_xlim3d(1, 5)
@@ -49,6 +54,9 @@ ax.set_yticklabels(y_tk)
 
 
 fig.colorbar(surf, shrink=0.5, aspect=5)
+
+ax.set_title("Estimate Accuracy")
+
 
 plt.show()
 
@@ -67,9 +75,10 @@ fig = plt.figure()
 plt.title("Forecasting")
 ax = fig.gca(projection='3d')
 
-x_prev2, y_prev2 = np.meshgrid(x, y)
+tck = interpolate.bisplrep(x_prev, y_prev, z, s=0)
+z_new = interpolate.bisplev(x_n[:,0], y_n[0,:], tck)
 
-surf = ax.plot_surface(x_prev2, y_prev2, z, rstride=1, cstride=1, cmap=cm.coolwarm,
+surf = ax.plot_surface(x_n, y_n, z_new, rstride=1, cstride=1, cmap=cm.coolwarm,
                        linewidth=0, antialiased=True)
 ax.set_zlim3d(50, 100)
 ax.set_xlim3d(1, 5)
@@ -84,6 +93,8 @@ ax.set_xticklabels(x_tk)
 ax.set_yticklabels(y_tk)
 
 fig.colorbar(surf, shrink=0.5, aspect=5)
+
+ax.set_title("Forecasting Accuracy")
 
 plt.show()
 # -------------------------------- Fim Previsão ---------------------------------------------------#
@@ -141,7 +152,11 @@ print pow(inverno_liner_reg.rvalue, 2), z_inverno
 dist_mar_smooth = np.linspace(distancia_mar.min(), distancia_mar.max(), 300)
 #fim
 
+
 plt.subplot(221)
+
+plt.title("Continentality Effect")
+
 #suavisando no eixo y
 smooth_primavera = spline(distancia_mar, p_primavera(distancia_mar), dist_mar_smooth)
 # fim
@@ -176,6 +191,8 @@ plt.plot(distancia_mar, media_inverno, 'ks', dist_mar_smooth, smooth_inverno, 'r
 plt.axis([0, 1600, 45, 100])
 plt.setp(plt.gca(), yticks=(50, 75, 100), xticks=(0, 183, 363, 500, 670, 830, 1500))
 plt.text(50, 90, 'Winter', fontsize=15)
+
+
 
 plt.show()
 # -------------------------------- Fim macroclimática ---------------------------------------------#
@@ -234,6 +251,9 @@ altitude_mar_smooth = np.linspace(altitude.min(), altitude.max(), 300)
 #fim
 
 plt.subplot(221)
+
+plt.title("Topographic Effect")
+
 #suavisando no eixo y
 smooth_primavera = spline(altitude, p_primavera(altitude), altitude_mar_smooth)
 # fim
@@ -310,6 +330,8 @@ ax2.set_ylabel(u'Celsius Degrees')
 plt.legend(handles=[red_patch, blue_patch, green_patch, red_line], loc='best')
 plt.xticks(range(1, 13), campo_mourao['month'])
 
+ax.set_title(u'Campo Mourão Climate Normal')
+
 plt.show()
 
 # Jaguaruana
@@ -344,4 +366,7 @@ ax2.set_ylabel(u'Celsius Degrees')
 
 plt.legend(handles=[red_patch, blue_patch, green_patch, red_line])
 plt.xticks(range(1, 13), jaguaruana['month'])
+
+ax.set_title(u'Jaguaruana Climate Normal')
+
 plt.show()
