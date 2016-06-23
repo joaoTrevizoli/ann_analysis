@@ -37,8 +37,19 @@ lons = np.array([-48.3257, -37.7815, -47.6476,
 
 x, y = m(lons, lats)
 
-m.scatter(x, y, s=50, marker='o', c='red', cmap=cm.cool, alpha=0.7, zorder=100)
+m.scatter(x, y, s=50, marker='o', c='red', cmap=cm.cool, alpha=0.7, zorder=100.)
 
-m.ax.set_title('Weather Station Locations')
+m.drawmapscale(-43., -32., -47.1, -28.1,  1000, fontsize=10, zorder=5, barstyle='fancy')
+
+
+parallels = np.arange(-50.,10,5.)
+
+print parallels
+
+m.drawparallels(parallels, labels=[1, 0, 0, 1])
+
+meridians = np.arange(70., 360., 5.)
+print meridians
+m.drawmeridians(meridians,labels=[1, 0, 0,1])
 
 plt.show()
