@@ -362,7 +362,7 @@ ax.set_ylim(0, 275)
 ax2.set_ylim(0, 40)
 ax2.set_ylabel(u'⁰C')
 
-plt.legend(handles=[red_patch, blue_patch, green_patch, red_line], loc='best')
+plt.legend(handles=[red_patch, blue_patch, green_patch, red_line], loc='best', frameon=False)
 plt.xticks(range(1, 13), x_months)
 
 plt.show()
@@ -394,7 +394,7 @@ ax2.set_ylim(0, 40)
 ax2.set_ylabel(u'⁰C')
 
 
-plt.legend(handles=[red_patch, blue_patch, green_patch, red_line])
+plt.legend(handles=[red_patch, blue_patch, green_patch, red_line], frameon=False)
 plt.xticks(range(1, 13), x_months)
 
 plt.show()
