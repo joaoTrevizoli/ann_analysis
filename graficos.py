@@ -12,7 +12,7 @@ from scipy import stats, interpolate
 from scipy.interpolate import spline
 import matplotlib.pyplot as plt
 import numpy as np
-from coleta_dados_bdclima import campo_mourao, jaguaruana
+# from coleta_dados_bdclima import campo_mourao, jaguaruana
 from change_z_position import MyAxes3D
 from time import sleep
 
@@ -38,7 +38,7 @@ z_new = interpolate.bisplev(x_n[:,0], y_n[0,:], tck)
 
 
 surf = ax.plot_surface(x_n, y_n, z_new, rstride=1, cstride=1, cmap=cm.coolwarm,
-                       linewidth=0, antialiased=True)
+                       linewidth=0, antialiased=True, alpha=0.7)
 ax.set_zlim3d(50, 100)
 ax.set_xlim3d(1, 5)
 ax.set_ylim3d(1, 4)
@@ -46,12 +46,14 @@ ax.set_ylim3d(1, 4)
 ax.zaxis.set_major_locator(LinearLocator(10))
 ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
 
+ax.contour(x_n, y_n, z_new, cmap='coolwarm', linewidths=2.5, alpha=1, origin='lower', extend='both')
 
 ax.set_xticks([i for i in range(1, 6)])
 ax.set_yticks([i for i in range(1, 7)])
 ax.set_zticks([i for i in range(50, 105, 5)])
 ax.set_xticklabels(x_tk)
 ax.set_yticklabels(y_tk)
+
 
 fig.colorbar(surf, shrink=0.6, aspect=5)
 
@@ -79,13 +81,15 @@ tck = interpolate.bisplrep(x_prev, y_prev, z, s=0)
 z_new = interpolate.bisplev(x_n[:,0], y_n[0,:], tck)
 
 surf = ax.plot_surface(x_n, y_n, z_new, rstride=1, cstride=1, cmap=cm.coolwarm,
-                       linewidth=0, antialiased=True)
+                       linewidth=0, antialiased=True, alpha=0.7)
 ax.set_zlim3d(50, 100)
 ax.set_xlim3d(1, 5)
 ax.set_ylim3d(1, 4)
 
 ax.zaxis.set_major_locator(LinearLocator(10))
 ax.zaxis.set_major_formatter(FormatStrFormatter('%.02f'))
+
+ax.contour(x_n, y_n, z_new, cmap='coolwarm', linewidths=2.5, alpha=1, origin='lower', extend='both')
 
 ax.set_xticks([i for i in range(1, 6)])
 ax.set_yticks([i for i in range(1, 7)])
@@ -362,7 +366,7 @@ ax.set_ylim(0, 275)
 ax2.set_ylim(0, 40)
 ax2.set_ylabel(u'⁰C')
 
-plt.legend(handles=[red_patch, blue_patch, green_patch, red_line], loc='best')
+plt.legend(handles=[red_patch, blue_patch, green_patch, red_line], loc='best', frameon=False)
 plt.xticks(range(1, 13), x_months)
 
 plt.show()
@@ -394,7 +398,7 @@ ax2.set_ylim(0, 40)
 ax2.set_ylabel(u'⁰C')
 
 
-plt.legend(handles=[red_patch, blue_patch, green_patch, red_line])
+plt.legend(handles=[red_patch, blue_patch, green_patch, red_line], frameon=False)
 plt.xticks(range(1, 13), x_months)
 
 plt.show()
