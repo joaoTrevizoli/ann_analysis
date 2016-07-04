@@ -168,7 +168,7 @@ plt.text(50, 90, 'A - Spring', fontsize=15)
 plt.ylabel('%')
 plt.xlabel('km')
 plt.text(300, 80, r'$f(x) = 2.54e^{-5} x^2 - 0.0416x + 72.63$', fontsize=10)
-plt.text(300, 75, r'$R^2 = 0.24$', fontsize=10)
+plt.text(300, 75, r'$R^2 = 0.24$', fontsize=11)
 
 plt.subplot(222)
 #suavisando no eixo y
@@ -181,7 +181,7 @@ plt.text(50, 90, 'B - Summer', fontsize=15)
 plt.ylabel('%')
 plt.xlabel('km')
 plt.text(300, 55, r'$f(x) = -1.40e^{-5} x^2 + 0.0386x + 58.46$', fontsize=10)
-plt.text(300, 50, r'$R^2 = 0.73$', fontsize=10)
+plt.text(300, 50, r'$R^2 = 0.73$', fontsize=11)
 
 plt.subplot(223)
 #suavisando no eixo y
@@ -194,7 +194,7 @@ plt.text(50, 90, 'C - Autumn', fontsize=15)
 plt.ylabel('%')
 plt.xlabel('km')
 plt.text(300, 80, r'$f(x) = 6.00e^{-6} x^2 - 0.0152x + 61.62$', fontsize=10)
-plt.text(300, 75, r'$R^2 = 0.30$', fontsize=10)
+plt.text(300, 75, r'$R^2 = 0.30$', fontsize=11)
 
 plt.subplot(224)
 #suavisando no eixo y
@@ -207,7 +207,7 @@ plt.text(50, 90, 'S - Winter', fontsize=15)
 plt.ylabel('%')
 plt.xlabel('km')
 plt.text(300, 55, r'$f(x) = -3.70e^{-6} x^2 - 0.0032x + 81.71$', fontsize=10)
-plt.text(300, 50, r'$R^2 = 0.16$', fontsize=10)
+plt.text(300, 50, r'$R^2 = 0.16$', fontsize=11)
 
 plt.tight_layout()
 plt.show()
@@ -278,7 +278,7 @@ plt.text(50, 90, 'A - Spring', fontsize=15)
 plt.ylabel('%')
 plt.xlabel('m')
 plt.text(150, 80, r'$f(x) = 8.17e^{-5} x^2 - 0.0883x + 80.59$', fontsize=10)
-plt.text(150, 75, r'$R^2 = 0.40$', fontsize=10)
+plt.text(150, 75, r'$R^2 = 0.40$', fontsize=11)
 
 plt.subplot(222)
 #suavisando no eixo y
@@ -291,7 +291,7 @@ plt.text(50, 90, 'B - Summer', fontsize=15)
 plt.ylabel('%')
 plt.xlabel('m')
 plt.text(150, 55, r'$f(x) = -3.37e^{-5} x^2 + 0.0528x + 57.09$', fontsize=10)
-plt.text(150, 50, r'$R^2 = 0.52$', fontsize=10)
+plt.text(150, 50, r'$R^2 = 0.52$', fontsize=11)
 
 plt.subplot(223)
 #suavisando no eixo y
@@ -304,7 +304,7 @@ plt.text(50, 90, 'C - Autumn', fontsize=15)
 plt.ylabel('%')
 plt.xlabel('m')
 plt.text(150, 80, r'$f(x) = 3.10e^{-5} x^2 - 0.0351x + 64.12$', fontsize=10)
-plt.text(150, 75, r'$R^2 = 0.34$', fontsize=10)
+plt.text(150, 75, r'$R^2 = 0.34$', fontsize=11)
 
 plt.subplot(224)
 #suavisando no eixo y
@@ -318,7 +318,7 @@ plt.ylabel('%')
 plt.xlabel('m')
 plt.tight_layout()
 plt.text(150, 55, r'$f(x) = 8.77e^{-5} x^2 - 0.0732x + 88.32$', fontsize=10)
-plt.text(150, 50, r'$R^2 = 0.30$', fontsize=10)
+plt.text(150, 50, r'$R^2 = 0.30$', fontsize=11)
 
 plt.show()
 
