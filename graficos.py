@@ -106,6 +106,140 @@ plt.tight_layout(pad=1.01)
 plt.show()
 # -------------------------------- Fim Previsão ---------------------------------------------------#
 
+# -------------------------------- Chuva -------------------------------------------------#
+vol_primavera = np.array([22.00, 186.70,
+                         447.00, 472.00,
+                         494.10, 562.00,
+                         603.60,   632.80,
+                         649.20,  754.10])
+
+media_primavera = np.array([97.22, 53.25,
+                            56.59,  59.02,
+                            58.89, 60.98,
+                            66.67, 59.44,
+                            58.54, 55.00])
+
+z_primavera = np.polyfit(vol_primavera, media_primavera, 2)
+primavera_liner_reg = stats.linregress(vol_primavera, media_primavera)
+p_primavera = np.poly1d(z_primavera)
+print pow(primavera_liner_reg.rvalue, 2), z_primavera
+
+vol_verao = np.array([376.80, 384.20,
+                      459.90, 481.40,
+                      503.00, 540.00,
+                      606.00, 674.70,
+                      682.50, 707.00])
+
+media_verao = np.array([60.24, 53.66,
+                        82.78, 75.69,
+                        73.66, 78.54,
+                        66.83, 75.61,
+                        65.56, 85.56])
+
+z_verao = np.polyfit(vol_verao, media_verao, 2)
+verao_liner_reg = stats.linregress(media_verao, media_verao)
+p_verao = np.poly1d(z_verao)
+print pow(verao_liner_reg.rvalue, 2), z_verao
+
+vol_outono= np.array([144.00, 172.80,
+                      174.80, 182.00,
+                      192.00, 202.80,
+                      276.40,  344.70,
+                      351.60, 951.60])
+
+media_outono = np.array([60.00, 54.63,
+                         60.00, 49.76,
+                         57.07, 50.56,
+                         47.22, 60.00,
+                         65.00, 61.49 ])
+
+z_outono = np.polyfit(vol_outono, media_outono, 2)
+outono_liner_reg = stats.linregress(vol_outono, media_outono)
+p_outono = np.poly1d(z_outono)
+print pow(outono_liner_reg.rvalue, 2), z_outono
+
+vol_inverno = np.array([92.70, 97.10,
+                        106.40, 109.00,
+                        133.00, 146.00,
+                        148.30, 221.90,
+                        305.10, 652.50])
+
+media_inverno = np.array([65.37, 66.11,
+                          85.00, 70.73,
+                          83.90, 78.54,
+                          75.12, 80.66,
+                          82.78, 97.40])
+
+z_inverno = np.polyfit(vol_inverno, media_inverno, 2)
+inverno_liner_reg = stats.linregress(vol_inverno, media_inverno)
+p_inverno = np.poly1d(z_inverno)
+print pow(inverno_liner_reg.rvalue, 2), z_inverno
+
+
+#suavizando curva do grafico no eixo x para todos os valores
+vol_primavera_smooth = np.linspace(vol_primavera.min(), vol_primavera.max(), 300)
+vol_verao_smooth = np.linspace(vol_verao.min(), vol_verao.max(), 300)
+vol_outono_smooth= np.linspace(vol_outono.min(), vol_outono.max(), 300)
+vol_inverno_smooth = np.linspace(vol_inverno.min(), vol_inverno.max(), 300)
+#fim
+
+
+
+plt.subplot(221)
+
+#suavisando no eixo y
+smooth_primavera = spline(vol_primavera, p_primavera(vol_primavera), vol_primavera_smooth)
+print smooth_primavera
+# fim
+plt.plot(vol_primavera, media_primavera, 'ks', vol_primavera_smooth, smooth_primavera, 'r-', lw=1)
+plt.axis([0, 1000, 45, 100])
+plt.setp(plt.gca(), yticks=range(50, 105, 5), xticks=(0, 200, 400, 600, 800, 1000))
+plt.text(50, 90, 'A - Spring', fontsize=15)
+plt.ylabel('%')
+plt.xlabel('mm')
+plt.text(300, 75, r'$R^2 = 0.60$', fontsize=10)
+
+plt.subplot(222)
+#suavisando no eixo y
+smooth_verao = spline(vol_verao, p_verao(vol_verao), vol_verao_smooth)
+print smooth_verao
+# fim
+plt.plot(vol_verao, media_verao, 'ks', vol_verao_smooth, smooth_verao, 'r-', lw=1)
+plt.axis([0, 1000, 45, 100])
+plt.setp(plt.gca(), yticks=range(50, 105, 5), xticks=(0, 200, 400, 600, 800, 1000))
+plt.text(50, 90, 'B - Summer', fontsize=15)
+plt.ylabel('%')
+plt.xlabel('mm')
+plt.text(300, 50, r'$R^2 = 0.38$', fontsize=10)
+
+plt.subplot(223)
+#suavisando no eixo y
+smooth_outono = spline(vol_outono, p_outono(vol_outono), vol_outono_smooth)
+# fim
+plt.plot(vol_outono, media_outono, 'ks', vol_outono_smooth, smooth_outono, 'r-', lw=1)
+plt.axis([0, 1000, 45, 100])
+plt.setp(plt.gca(), yticks=range(50, 105, 5), xticks=(0, 200, 400, 600, 800, 1000))
+plt.text(50, 90, 'C - Autumn', fontsize=15)
+plt.ylabel('%')
+plt.xlabel('mm')
+plt.text(300, 75, r'$R^2 = 0.15$', fontsize=10)
+
+plt.subplot(224)
+#suavisando no eixo y
+smooth_inverno = spline(vol_inverno, p_inverno(vol_inverno), vol_inverno_smooth)
+# fim
+plt.plot(vol_inverno, media_inverno, 'ks', vol_inverno_smooth, smooth_inverno, 'r-', lw=1)
+plt.axis([0, 1000, 45, 100])
+plt.setp(plt.gca(), yticks=range(50, 105, 5), xticks=(0, 200, 400, 600, 800, 1000))
+plt.text(50, 90, 'S - Winter', fontsize=15)
+plt.ylabel('%')
+plt.xlabel('mm')
+plt.text(300, 75, r'$R^2 = 0.62$', fontsize=10)
+
+plt.tight_layout()
+plt.show()
+# -------------------------------- Fim chuva ---------------------------------------------#
+
 
 # -------------------------------- Macroclimática -------------------------------------------------#
 distancia_mar = np.array([0, 31.4, 183, 363, 435, 480, 500, 670, 830, 1500])
@@ -171,7 +305,7 @@ plt.setp(plt.gca(), yticks=range(50, 105, 5), xticks=(0, 300, 600, 900, 1200, 15
 plt.text(50, 90, 'A - Spring', fontsize=15)
 plt.ylabel('%')
 plt.xlabel('km')
-plt.text(300, 80, r'$f(x) = 2.54e^{-5} x^2 - 0.0416x + 72.63$', fontsize=10)
+# plt.text(300, 80, r'$f(x) = 2.54e^{-5} x^2 - 0.0416x + 72.63$', fontsize=10)
 plt.text(300, 75, r'$R^2 = 0.24$', fontsize=10)
 
 plt.subplot(222)
@@ -184,7 +318,7 @@ plt.setp(plt.gca(), yticks=range(50, 105, 5), xticks=(0, 300, 600, 900, 1200, 15
 plt.text(50, 90, 'B - Summer', fontsize=15)
 plt.ylabel('%')
 plt.xlabel('km')
-plt.text(300, 55, r'$f(x) = -1.40e^{-5} x^2 + 0.0386x + 58.46$', fontsize=10)
+# plt.text(300, 55, r'$f(x) = -1.40e^{-5} x^2 + 0.0386x + 58.46$', fontsize=10)
 plt.text(300, 50, r'$R^2 = 0.73$', fontsize=10)
 
 plt.subplot(223)
@@ -197,7 +331,7 @@ plt.setp(plt.gca(), yticks=range(50, 105, 5), xticks=(0, 300, 600, 900, 1200, 15
 plt.text(50, 90, 'C - Autumn', fontsize=15)
 plt.ylabel('%')
 plt.xlabel('km')
-plt.text(300, 80, r'$f(x) = 6.00e^{-6} x^2 - 0.0152x + 61.62$', fontsize=10)
+# plt.text(300, 80, r'$f(x) = 6.00e^{-6} x^2 - 0.0152x + 61.62$', fontsize=10)
 plt.text(300, 75, r'$R^2 = 0.30$', fontsize=10)
 
 plt.subplot(224)
@@ -210,7 +344,7 @@ plt.setp(plt.gca(), yticks=range(50, 105, 5), xticks=(0, 300, 600, 900, 1200, 15
 plt.text(50, 90, 'S - Winter', fontsize=15)
 plt.ylabel('%')
 plt.xlabel('km')
-plt.text(300, 55, r'$f(x) = -3.70e^{-6} x^2 - 0.0032x + 81.71$', fontsize=10)
+# plt.text(300, 55, r'$f(x) = -3.70e^{-6} x^2 - 0.0032x + 81.71$', fontsize=10)
 plt.text(300, 50, r'$R^2 = 0.16$', fontsize=10)
 
 plt.tight_layout()
@@ -281,7 +415,7 @@ plt.setp(plt.gca(), yticks=range(50, 105, 5), xticks=(0, 200, 400, 600, 800))
 plt.text(50, 90, 'A - Spring', fontsize=15)
 plt.ylabel('%')
 plt.xlabel('m')
-plt.text(150, 80, r'$f(x) = 8.17e^{-5} x^2 - 0.0883x + 80.59$', fontsize=10)
+# plt.text(150, 80, r'$f(x) = 8.17e^{-5} x^2 - 0.0883x + 80.59$', fontsize=10)
 plt.text(150, 75, r'$R^2 = 0.40$', fontsize=10)
 
 plt.subplot(222)
@@ -294,7 +428,7 @@ plt.setp(plt.gca(), yticks=range(50, 105, 5), xticks=(0, 200, 400, 600, 800))
 plt.text(50, 90, 'B - Summer', fontsize=15)
 plt.ylabel('%')
 plt.xlabel('m')
-plt.text(150, 55, r'$f(x) = -3.37e^{-5} x^2 + 0.0528x + 57.09$', fontsize=10)
+# plt.text(150, 55, r'$f(x) = -3.37e^{-5} x^2 + 0.0528x + 57.09$', fontsize=10)
 plt.text(150, 50, r'$R^2 = 0.52$', fontsize=10)
 
 plt.subplot(223)
@@ -307,7 +441,7 @@ plt.setp(plt.gca(), yticks=range(50, 105, 5), xticks=(0, 200, 400, 600, 800))
 plt.text(50, 90, 'C - Autumn', fontsize=15)
 plt.ylabel('%')
 plt.xlabel('m')
-plt.text(150, 80, r'$f(x) = 3.10e^{-5} x^2 - 0.0351x + 64.12$', fontsize=10)
+# plt.text(150, 80, r'$f(x) = 3.10e^{-5} x^2 - 0.0351x + 64.12$', fontsize=10)
 plt.text(150, 75, r'$R^2 = 0.34$', fontsize=10)
 
 plt.subplot(224)
@@ -321,7 +455,7 @@ plt.text(50, 90, 'D - Winter', fontsize=15)
 plt.ylabel('%')
 plt.xlabel('m')
 plt.tight_layout()
-plt.text(150, 55, r'$f(x) = 8.77e^{-5} x^2 - 0.0732x + 88.32$', fontsize=10)
+# plt.text(150, 55, r'$f(x) = 8.77e^{-5} x^2 - 0.0732x + 88.32$', fontsize=10)
 plt.text(150, 50, r'$R^2 = 0.30$', fontsize=10)
 
 plt.show()
