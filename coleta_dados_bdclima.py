@@ -20,7 +20,7 @@ class GetData(object):
         try:
             return html.fromstring(self.get_html).xpath(xpath)
         except Exception as e:
-            print e
+            print(e)
             return None
 
     @staticmethod

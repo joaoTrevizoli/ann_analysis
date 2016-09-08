@@ -78,7 +78,7 @@ fig = plt.figure()
 ax = fig.gca(projection='3d')
 
 tck = interpolate.bisplrep(x_prev, y_prev, z, s=0)
-z_new = interpolate.bisplev(x_n[:,0], y_n[0,:], tck)
+z_new = interpolate.bisplev(x_n[:, 0], y_n[0,:], tck)
 
 surf = ax.plot_surface(x_n, y_n, z_new, rstride=1, cstride=1, cmap=cm.coolwarm,
                        linewidth=0, antialiased=True, alpha=0.7)
@@ -119,10 +119,10 @@ media_primavera = np.array([97.22, 53.25,
                             66.67, 59.44,
                             58.54, 55.00])
 
-z_primavera = np.polyfit(vol_primavera, media_primavera, 2)
-primavera_liner_reg = stats.linregress(vol_primavera, media_primavera)
+z_primavera = np.polyfit(vol_primavera[1:], media_primavera[1:], 2)
+primavera_liner_reg = stats.linregress(vol_primavera[1:], media_primavera[1:])
 p_primavera = np.poly1d(z_primavera)
-print pow(primavera_liner_reg.rvalue, 2), z_primavera
+print(pow(primavera_liner_reg.rvalue, 2), z_primavera)
 
 vol_verao = np.array([376.80, 384.20,
                       459.90, 481.40,
@@ -139,7 +139,7 @@ media_verao = np.array([60.24, 53.66,
 z_verao = np.polyfit(vol_verao, media_verao, 2)
 verao_liner_reg = stats.linregress(media_verao, media_verao)
 p_verao = np.poly1d(z_verao)
-print pow(verao_liner_reg.rvalue, 2), z_verao
+print(pow(verao_liner_reg.rvalue, 2), z_verao)
 
 vol_outono= np.array([144.00, 172.80,
                       174.80, 182.00,
@@ -156,7 +156,7 @@ media_outono = np.array([60.00, 54.63,
 z_outono = np.polyfit(vol_outono, media_outono, 2)
 outono_liner_reg = stats.linregress(vol_outono, media_outono)
 p_outono = np.poly1d(z_outono)
-print pow(outono_liner_reg.rvalue, 2), z_outono
+print(pow(outono_liner_reg.rvalue, 2), z_outono)
 
 vol_inverno = np.array([92.70, 97.10,
                         106.40, 109.00,
@@ -173,11 +173,11 @@ media_inverno = np.array([65.37, 66.11,
 z_inverno = np.polyfit(vol_inverno, media_inverno, 2)
 inverno_liner_reg = stats.linregress(vol_inverno, media_inverno)
 p_inverno = np.poly1d(z_inverno)
-print pow(inverno_liner_reg.rvalue, 2), z_inverno
+print(pow(inverno_liner_reg.rvalue, 2), z_inverno)
 
 
 #suavizando curva do grafico no eixo x para todos os valores
-vol_primavera_smooth = np.linspace(vol_primavera.min(), vol_primavera.max(), 300)
+vol_primavera_smooth = np.linspace(vol_primavera[1:].min(), vol_primavera[1:].max(), 300)
 vol_verao_smooth = np.linspace(vol_verao.min(), vol_verao.max(), 300)
 vol_outono_smooth= np.linspace(vol_outono.min(), vol_outono.max(), 300)
 vol_inverno_smooth = np.linspace(vol_inverno.min(), vol_inverno.max(), 300)
@@ -188,20 +188,20 @@ vol_inverno_smooth = np.linspace(vol_inverno.min(), vol_inverno.max(), 300)
 plt.subplot(221)
 
 #suavisando no eixo y
-smooth_primavera = spline(vol_primavera, p_primavera(vol_primavera), vol_primavera_smooth)
-print smooth_primavera
+smooth_primavera = spline(vol_primavera[1:], p_primavera(vol_primavera[1:]), vol_primavera_smooth)
+print(smooth_primavera)
 # fim
 plt.plot(vol_primavera, media_primavera, 'ks', vol_primavera_smooth, smooth_primavera, 'r-', lw=1)
 plt.axis([0, 1100, 45, 100])
 plt.setp(plt.gca(),  yticks=range(50, 105, 5), xticks=(0, 200, 400, 600, 800, 1000), xticklabels=[])
 plt.text(50, 90, 'A - Spring', fontsize=15)
 plt.ylabel('Accuracy (%)')
-plt.text(300, 75, r'$R^2 = 0.60$', fontsize=10)
+plt.text(300, 75, r'$R^2 = 0.73$', fontsize=10)
 
 plt.subplot(222)
 #suavisando no eixo y
 smooth_verao = spline(vol_verao, p_verao(vol_verao), vol_verao_smooth)
-print smooth_verao
+print(smooth_verao)
 # fim
 plt.plot(vol_verao, media_verao, 'ks', vol_verao_smooth, smooth_verao, 'r-', lw=1)
 plt.axis([0, 1100, 45, 100])
@@ -230,7 +230,7 @@ smooth_inverno = spline(vol_inverno, p_inverno(vol_inverno), vol_inverno_smooth)
 plt.plot(vol_inverno, media_inverno, 'ks', vol_inverno_smooth, smooth_inverno, 'r-', lw=1)
 plt.axis([0, 1100, 45, 100])
 plt.setp(plt.gca(), yticks=range(50, 105, 5),  yticklabels=[], xticks=(0, 200, 400, 600, 800, 1000))
-plt.text(50, 90, 'S - Winter', fontsize=15)
+plt.text(50, 90, 'D - Winter', fontsize=15)
 plt.xlabel('Precipitation (m)')
 plt.text(300, 75, r'$R^2 = 0.62$', fontsize=10)
 
@@ -251,7 +251,7 @@ media_primavera = np.array([53.248138324, 97.2222222222,
 z_primavera = np.polyfit(distancia_mar, media_primavera, 2)
 primavera_liner_reg = stats.linregress(distancia_mar, media_primavera)
 p_primavera = np.poly1d(z_primavera)
-print pow(primavera_liner_reg.rvalue, 2), z_primavera
+print(pow(primavera_liner_reg.rvalue, 2), z_primavera)
 
 media_verao = np.array([60.2380952381, 53.6585365854,
                         66.8292682927, 73.6585365853,
@@ -262,7 +262,7 @@ media_verao = np.array([60.2380952381, 53.6585365854,
 z_verao = np.polyfit(distancia_mar, media_verao, 2)
 verao_liner_reg = stats.linregress(distancia_mar, media_verao)
 p_verao = np.poly1d(z_verao)
-print pow(verao_liner_reg.rvalue, 2), z_verao
+print(pow(verao_liner_reg.rvalue, 2), z_verao)
 
 media_outono = np.array([61.4919354839, 65.0000000000,
                          60.0000000000, 57.0731707317,
@@ -273,7 +273,7 @@ media_outono = np.array([61.4919354839, 65.0000000000,
 z_outono = np.polyfit(distancia_mar, media_outono, 2)
 outono_liner_reg = stats.linregress(distancia_mar, media_outono)
 p_outono = np.poly1d(z_outono)
-print pow(outono_liner_reg.rvalue, 2), z_outono
+print(pow(outono_liner_reg.rvalue, 2), z_outono)
 
 media_inverno = np.array([97.3978494624, 75.1219512195,
                           70.7317073171, 78.5365853658,
@@ -284,7 +284,7 @@ media_inverno = np.array([97.3978494624, 75.1219512195,
 z_inverno = np.polyfit(distancia_mar, media_inverno, 2)
 inverno_liner_reg = stats.linregress(distancia_mar, media_inverno)
 p_inverno = np.poly1d(z_inverno)
-print pow(inverno_liner_reg.rvalue, 2), z_inverno
+print(pow(inverno_liner_reg.rvalue, 2), z_inverno)
 
 
 #suavizando curva do grafico no eixo x para todos os valores
@@ -362,7 +362,7 @@ media_primavera = np.array([97.2222222222, 53.248138324,
 z_primavera = np.polyfit(altitude, media_primavera, 2)
 primavera_liner_reg = stats.linregress(altitude, media_primavera)
 p_primavera = np.poly1d(z_primavera)
-print pow(primavera_liner_reg.rvalue, 2), z_primavera
+print(pow(primavera_liner_reg.rvalue, 2), z_primavera)
 
 
 media_verao = np.array([53.6585365854, 60.2380952381,
@@ -374,7 +374,7 @@ media_verao = np.array([53.6585365854, 60.2380952381,
 z_verao = np.polyfit(altitude, media_verao, 2)
 verao_liner_reg = stats.linregress(altitude, media_verao)
 p_verao = np.poly1d(z_verao)
-print pow(verao_liner_reg.rvalue, 2), z_verao
+print(pow(verao_liner_reg.rvalue, 2), z_verao)
 
 media_outono = np.array([65.0000000000, 61.4919354839,
                           50.5555555556, 60.0000000000,
@@ -385,7 +385,7 @@ media_outono = np.array([65.0000000000, 61.4919354839,
 z_outono = np.polyfit(altitude, media_outono, 2)
 verao_liner_reg = stats.linregress(altitude, media_outono)
 p_outono= np.poly1d(z_outono)
-print pow(verao_liner_reg.rvalue, 2), z_outono
+print(pow(verao_liner_reg.rvalue, 2), z_outono)
 
 media_inverno = np.array([75.1219512195, 97.3978494624,
                           85.0000000000, 66.1111111111,
@@ -396,7 +396,7 @@ media_inverno = np.array([75.1219512195, 97.3978494624,
 z_inverno = np.polyfit(altitude, media_inverno, 2)
 verao_liner_reg = stats.linregress(altitude, media_inverno)
 p_inverno= np.poly1d(z_inverno)
-print pow(verao_liner_reg.rvalue, 2), z_inverno
+print(pow(verao_liner_reg.rvalue, 2), z_inverno)
 
 #suavizando curva do grafico no eixo x para todos os valores
 altitude_mar_smooth = np.linspace(altitude.min(), altitude.max(), 300)
@@ -472,6 +472,16 @@ x_months = ['Jan', 'Feb', 'Mar', 'Apr',
             'Sep', 'Oct', 'Nov', 'Dec']
 
 # Campo mourao
+
+campo_mourao = {'temperature': [22.9, 22.7, 21.3, 19.1, 16.4, 15.4, 16.2, 16.9, 18.2, 18.6, 21.8, 22.4],
+                'precipitation': [175.0, 165.0, 120.0, 97.0, 124.0, 123.0, 83.0, 84.0, 138.0, 162.0, 136.0, 196.0],
+                'pet': [112.68, 100.53, 93.36, 67.98, 48.43, 39.37, 44.76, 50.43, 60.15, 69.02, 97.78, 110.67],
+                'storage': [100.00, 100.00, 100.00, 100.00, 100.00, 100.00, 100.00, 100.00, 100.00, 100.00, 100.00, 100.00],
+                'ret': [112.7, 100.5, 93.4, 68.0, 48.4, 39.4, 44.8, 50.4, 60.2, 69.0, 97.8, 110.7],
+                'def': [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+                'exc': [62.3, 64.5, 26.6, 29.0, 75.6, 83.6, 38.2, 33.6, 77.8, 93.0, 38.2, 85.3]
+                }
+
 campo_mourao['def'] = [-i if i != 0 else 0 for i in campo_mourao['def']]
 
 fig = plt.figure()
@@ -492,17 +502,26 @@ ax2.set_ylim(0, 35)
 
 ax.set_ylabel('mm')
 ax.set_xlim(1, 12)
-ax.set_ylim(0, 275)
+ax.set_ylim(-175 , 275)
 
 ax2.set_ylim(0, 40)
 ax2.set_ylabel(u'⁰C')
 
-plt.legend(handles=[red_patch, blue_patch, green_patch, red_line], loc='best', frameon=False)
+plt.legend(handles=[red_patch, blue_patch, green_patch, red_line], loc='lower right', frameon=False)
 plt.xticks(range(1, 13), x_months)
 
 plt.show()
 
 # Jaguaruana
+
+jaguaruana = {'temperature': [27.9, 24.0, 26.9, 26.9, 25.2, 26.1, 26.0, 26.4, 27.3, 27.5, 28.1, 26.0],
+              'precipitation': [30.0, 123.0, 231.0, 181.0, 115.0, 55.0, 46.0, 55.0, 48.0, 3.0, 1.0, 17.0],
+              'pet': [166.21, 87.81, 147.69, 141.30, 113.15, 123.91, 126.03, 134.18, 148.69, 159.68, 169.33, 131.75,],
+              'storage': [0.01, 35.21, 100.00, 100.00, 100.00, 50.20, 22.55, 10.22, 3.73, 0.78, 0.14, 0.05,],
+              'ret': [30.0, 87.8, 147.7, 141.3, 113.1, 104.8, 73.7, 67.3, 54.5, 6.0, 1.6, 17.1],
+              'def': [136.2, 0.0, 0.0, 0.0, 0.0, 19.1, 52.4, 66.8, 94.2, 153.7, 167.7, 114.6],
+              'exc': [0.0, 0.0, 18.5, 39.7, 1.9, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+              }
 
 jaguaruana['def'] = [-i if i != 0 else 0 for i in jaguaruana['def']]
 
@@ -529,7 +548,7 @@ ax2.set_ylim(0, 40)
 ax2.set_ylabel(u'⁰C')
 
 
-plt.legend(handles=[red_patch, blue_patch, green_patch, red_line], frameon=False)
+# plt.legend(handles=[red_patch, blue_patch, green_patch, red_line], frameon=False)
 plt.xticks(range(1, 13), x_months)
 
 plt.show()
