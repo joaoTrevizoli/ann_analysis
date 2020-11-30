@@ -3,6 +3,7 @@ from matplotlib.patches import Polygon
 from mpl_toolkits.basemap import Basemap
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
+import shapefile as s
 
 import os
 
@@ -21,7 +22,15 @@ m.ax = ax
 m.fillcontinents()
 
 
+shp_teste = s.Reader(shapefile)
+
+for i, j  in zip (shp_teste.shapes(), shp_teste.records()):
+    print (i, j)
+
 shp = m.readshapefile(shapefile, 'states', drawbounds=True)
+
+
+print(shp)
 for nshape, seg in enumerate(m.states):
     poly = Polygon(seg, facecolor='0.75', edgecolor='k')
     ax.add_patch(poly)
